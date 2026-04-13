@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Color Canvas</title>
+    <meta name="description" content="A beautiful and secure web application to dynamically customize your background color with smooth transitions and modern UI design.">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glass-container">
+        <header>
+            <h1>Color Canvas</h1>
+            <p>Customize your space. Choose a vibrant color.</p>
+        </header>
+
+        <main>
+            <div class="color-picker-wrapper">
+                <label for="colorPicker" class="picker-label">Select Hue</label>
+                <input type="color" id="colorPicker" value="#0f172a">
+                <div class="hex-display" id="hexValue">#0f172a</div>
+            </div>
+            
+            <button id="randomizeBtn" class="primary-btn">
+                <span>Randomize</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><line x1="12" y1="22" x2="12" y2="12"></line></svg>
+            </button>
+        </main>
+
+        <footer>
+            <p>Secured by Docker & Express Helmet</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
