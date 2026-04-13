@@ -30,7 +30,7 @@ jobs:
 
       - name: Update, Commit and Push
         run: |
-          cd gitops-cicd-k8s
+          cd gitops-cicd-k8s/helm
           sed -i 's/tag: .*/tag: "${{ github.sha }}"/' values.yaml
           git config user.name "github-actions"
           git config user.email "actions@github.com"
