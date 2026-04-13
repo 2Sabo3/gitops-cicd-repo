@@ -26,7 +26,7 @@ jobs:
         run: docker push joyboy123/argocd:${{ github.sha }}
 
       - name: Clone Deployment Repo
-        run: git clone https://github.com/2Sabo3/gitops-cicd-k8s.git
+        run: git clone https://${{ secrets.GH_TOKEN }}@github.com/2Sabo3/gitops-cicd-k8s.git
 
       - name: Update, Commit and Push
         run: |
