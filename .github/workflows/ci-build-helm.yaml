@@ -1,0 +1,39 @@
+name: Build, Push and Update Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout App Repo
+        uses: actions/checkout@v3
+
+      - name: Login to Dockerhub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Image
+        run: docker build -t joyboy123/argocd:${{ github.sha }} .
+
+      - name: Push Image
+        run: docker push joyboy123/argocd:${{ github.sha }}
+
+      - name: Clone Deployment Repo
+        run: git clone https://${{ secrets.GH_TOKEN }}@github.com/2Sabo3/gitops-cicd-k8s.git
+
+      - name: Update, Commit and Push
+        run: |
+          cd gitops-cicd-k8s
+          sed -i 's/tag: .*/tag: "${{ github.sha }}"/' values.yaml
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image to ${{ github.sha }}" || echo "No changes"
+          git push
