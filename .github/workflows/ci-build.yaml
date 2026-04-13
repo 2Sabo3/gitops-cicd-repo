@@ -1,9 +1,12 @@
-name: Build,Push and Update Deployment
+name: Build, Push and Update Deployment
 
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -14,23 +17,23 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Login to Dockerhub
-        run: echo "{{ secrets.DOCKER_PASSWORD }}"  | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-     - name: Build Image
-       run: docker build -t joyboy123/argocd:${{ github.sha }} .
+      - name: Build Image
+        run: docker build -t joyboy123/argocd:${{ github.sha }} .
 
-     - name: Push Image
-       run: docker push joyboy123/argocd:${{github.sha }}
+      - name: Push Image
+        run: docker push joyboy123/argocd:${{ github.sha }}
 
-     - name: Clone Deployment Repo
-       run: git clone https://github.com/2Sabo3/gitops-cicd-k8s.git
+      - name: Clone Deployment Repo
+        run: git clone https://${{ secrets.GH_TOKEN }}@github.com/2Sabo3/gitops-cicd-k8s.git
 
-    - name: Commit and Push Changes
-      run: |
-        cd gitops-cicd-k8s
-        sed -i 's|image: .*|image: your-dockerhub-username/my-app:${{ github.sha }}|' deployment.yaml
-        git config user.name "github-actions"
-        git config user.email "action@github.com"
-        git add .
-        git commit -m "Update image to ${{ github.sha }}
-        git push
+      - name: Update, Commit and Push
+        run: |
+          cd gitops-cicd-k8s
+          sed -i 's|image: .*|image: joyboy123/argocd:${{ github.sha }}|' deployment.yaml
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image to ${{ github.sha }}" || echo "No changes"
+          git push
